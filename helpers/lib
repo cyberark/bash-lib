@@ -1,0 +1,20 @@
+#!/bin/bash
+
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+function die(){
+    echo "${@}"
+    exit 1
+}
+
+#safe pushd
+function spushd(){
+    if ! pushd "${1}" >/dev/null; then
+        die "pushd ${1} failed :("
+    fi
+}
+
+#safe popd
+function spopd(){
+    popd >/dev/null || die "popd failed :("
+}
