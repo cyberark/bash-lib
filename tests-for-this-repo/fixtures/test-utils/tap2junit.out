@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="1" tests="3" time="0.0">
+	<testsuite disabled="0" errors="0" failures="1" name="tap2junit" skipped="0" tests="3" time="0">
+		<testcase classname="tap2junit" name="Passed Test"/>
+		<testcase classname="tap2junit" name="Failed Test">
+			<failure type="failure"> Diagnostic output
+ more diagnostic output</failure>
+		</testcase>
+		<testcase classname="tap2junit" name="Another Passed Test"/>
+	</testsuite>
+</testsuites>

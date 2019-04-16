@@ -1,0 +1,13 @@
+#!/bin/bash
+
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+# Add logging functions here
+
+function announce() {
+  echo "++++++++++++++++++++++++++++++++++++++"
+  echo " "
+  echo "$@"
+  echo " "
+  echo "++++++++++++++++++++++++++++++++++++++"
+}

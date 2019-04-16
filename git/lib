@@ -1,0 +1,79 @@
+#!/bin/bash
+
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+. "${BASH_LIB_DIR}/helpers/lib"
+
+# Get the top level of a git repo
+function repo_root(){
+    git rev-parse --show-toplevel
+}
+
+# List files tracked by git
+function all_files_in_repo(){
+    git ls-tree -r HEAD --name-only
+}
+
+# Find the latest tag available at a repo url
+# Returns tag name, not sha
+function remote_latest_tag(){
+    local -r remote_url="${1}"
+    # In ls-remote the ^{} suffix refers to a peeled/dereferenced object.
+    # eg refs/tags/v0.0.1^{} shows the SHA of the commit that was tagged,
+    # not the SHA of the tag itself.
+    # Adding --refs hides peeled tags
+    git ls-remote --tags --refs --quiet \
+        "${remote_url}" \
+        | tail -n 1 \
+        | cut -f 2 \
+        | sed -e 's+refs/tags/++'
+}
+
+# Find the SHA of the latests commit to be tagged in a remote repo
+function remote_latest_tagged_commit(){
+    local -r remote="${1}"
+    local -r tag="$(remote_latest_tag "${remote}")"
+    git ls-remote "${remote}" | awk "/refs\/tags\/${tag}\^/{print \$1}"
+}
+
+function remote_sha_for_ref(){
+    local -r remote="${1}"
+    local -r ref="${2}"
+
+    # First try adding ^{} to the ref, incase it's a tag
+    # and needs peeling. If nothing is found for that,
+    # try without.
+    peeled_ref=$(
+        git ls-remote "${remote}" \
+            | awk "/${ref}[^$]/{print \$1}"
+    )
+
+    if [[ -n "${peeled_ref}" ]]; then
+        echo "${peeled_ref}"
+    else
+        git ls-remote "${remote}" \
+            | awk "/${ref}/{print \$1}"
+    fi
+}
+
+function remote_tag_for_sha(){
+    local -r remote="${1}"
+    local -r sha="${2}"
+    git ls-remote "${remote}" \
+        | awk -F'/' "/${sha}.*tag/{ gsub(/\^\{\}\$/, \"\"); print \$3 }"
+}
+
+
+## Minimal git subtree functionality required for tests to pass
+# full subtree functionality is not ready for merge.
+function cat_gittrees(){
+    local -r git_trees="$(repo_root)/.gittrees"
+    local -r subtrees_file_format=".gittrees should contain one subtree per line,\
+space seperated with three fields: subtree_path renmote_url remote_name"
+    [[ -e "${git_trees}" ]] || die ".gittrees file ${git_trees} not found. ${subtrees_file_format}"
+    grep -E -v '^\s*$|^\s*#' "$(repo_root)/.gittrees"
+}
+
+function tracked_files_excluding_subtrees(){
+    subtrees="$(cat_gittrees | awk '{print $1}' | paste -sd '|' -)"
+    all_files_in_repo | grep -E -v "${subtrees}"
+}

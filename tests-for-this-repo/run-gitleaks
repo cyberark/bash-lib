@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Check this repo for secret leaks
+
+# This script is an entry point, so init
+# is not assumed to have been run
+# shellcheck disable=SC2086,SC2046
+. $(dirname "${BASH_SOURCE[0]}")/../init
+. "${BASH_LIB_DIR}/test-utils/lib"
+. "${BASH_LIB_DIR}/helpers/lib"
+
+docker run \
+    --rm \
+    --name=gitleaks \
+    -v ${BASH_LIB_DIR}:/code/ \
+    zricethezav/gitleaks:v2.0.0 \
+        -v \
+        --repo-path=/code/
