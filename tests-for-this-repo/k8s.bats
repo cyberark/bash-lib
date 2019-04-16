@@ -1,0 +1,27 @@
+. "${BASH_LIB}/test-utils/bats-support/load.bash"
+. "${BASH_LIB}/test-utils/bats-assert-1/load.bash"
+
+. "${BASH_LIB}/k8s/lib.sh"
+
+@test "gke-utils image builds" {
+    run build_gke_image
+    assert_success
+}
+
+@test "Kubernetes Cluster Is Available" {
+        : ${KUBECTL_CLI_URL:?Required Var, did you run tests via summon?}
+        run run_docker_gke_command "kubectl cluster-info"
+        assert_output --regexp "Kubernetes master.* is running at .*https://"
+        assert_success
+}
+
+@test "Can delete gke image" {
+    local -r image="${DOCKER_REGISTRY_PATH}/alpine-test-${RANDOM}"
+    run_docker_gke_command "
+        docker pull alpine
+        docker tag alpine ${image}
+        docker push ${image}
+    "
+    run delete_gke_image "${image}"
+    assert_success
+}
