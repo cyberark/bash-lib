@@ -1,0 +1,13 @@
+# Git Subtrees
+
+# The advantage of subtrees is that users don't have to care about them - its
+# just a single repo. The disadvantage is that git doesn't track the metadata
+# as it does for submodules.
+
+# This file provides an enumeration of the subtrees in this repo, and the URLs
+# they came from.
+
+# subtree_path remote_url remote_name
+test-utils/bats https://github.com/bats-core/bats bats
+test-utils/bats-support https://github.com/ztombol/bats-support bats-support
+test-utils/bats-assert-1 https://github.com/jasonkarns/bats-assert-1 bats-assert-1
