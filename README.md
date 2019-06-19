@@ -29,6 +29,14 @@ The place to store functions that are used in pipelines for multiple repos.
 
 Please add whatever is useful to you, but keep it tidy so its still useful to everyone else :)
 
+## Release Status
+TL;DR: Ready for use, but needs expansion.
+
+The functions in this repo are tested and ready for use, but certain libs
+are pretty much place holders (eg logging). Those need further contributions
+before they provide a comprehensive solution.
+
+
 ## Usage
 
 Add bash-lib into your project in the way that best fits your workflow. The only requirement is that you **pin the version of
@@ -168,6 +176,12 @@ TL;DR:
     </tr>
   </tbody>
 </table>
+
+# Contibuting
+
+Please contribute your bash functions! The more we share the less we duplicate each other.
+In order to keep this repo tidy, every function must be documented in the readme and tested,
+the lint scripts enforce these rules.
 
 ## Testing
 Tests are written using [BATS](https://github.com/bats-core/bats). Each libould have a `lib-name.bats` file in [tests-for-this-repo](/tests-for-this-repo).
