@@ -29,13 +29,15 @@ The place to store functions that are used in pipelines for multiple repos.
 
 Please add whatever is useful to you, but keep it tidy so its still useful to everyone else :)
 
-## Release Status
+## Release Status: Alpha
 TL;DR: Ready for use, but needs expansion.
 
 The functions in this repo are tested and ready for use, but certain libs
 are pretty much place holders (eg logging). Those need further contributions
 before they provide a comprehensive solution.
 
+## License: Apache 2.0
+See the [license file](LICENSE)
 
 ## Usage
 
@@ -178,10 +180,23 @@ TL;DR:
 </table>
 
 # Contibuting
+Thanks for your interest in bash-lib. Before contributing, please take a
+moment to read and sign our [Contributor
+Agreement](CyberArk_Open_Source_Contributor_Agreement.pdf). This provides
+patent protection for all Secretless Broker users and allows CyberArk to
+enforce its license terms. Please email a signed copy to <a
+href="oss@cyberark.com">oss@cyberark.com</a>
 
-Please contribute your bash functions! The more we share the less we duplicate each other.
-In order to keep this repo tidy, every function must be documented in the readme and tested,
-the lint scripts enforce these rules.
+Contributed bash functions are most welcome! The more we share the less we
+duplicate each other. In order to keep this repo tidy, every function must be
+documented in the readme and tested, the lint scripts enforce these rules.
+
+1. Add the libraries or functions that you need
+1. Add BATS tests for all new top level functions
+1. Add descriptions for each function to the contents table in this readme
+1. Run ./run-tests to ensure all tests pass before submitting
+1. Create a PR
+1. Wait for review
 
 ## Testing
 Tests are written using [BATS](https://github.com/bats-core/bats). Each libould have a `lib-name.bats` file in [tests-for-this-repo](/tests-for-this-repo).
@@ -208,3 +223,6 @@ Example:
 ```
 
 Test fixtures should go in /tests-for-this-repo/[fixtures](tests-for-this-repo/fixtures)/lib-name.
+
+# Maintainers
+* [Hugh Saunders](github.com/hughsaunders)
