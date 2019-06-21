@@ -199,8 +199,8 @@ documented in the readme and tested, the lint scripts enforce these rules.
 1. Wait for review
 
 ## Testing
-Tests are written using [BATS](https://github.com/bats-core/bats). Each libould have a `lib-name.bats` file in [tests-for-this-repo](/tests-for-this-repo).
-Asserts are provided by [bats-assert-1](https://github.com/jasonkarns/bats-assert-1). The value in these is that they provide useful debugging output when the assertion fails, eg expected x got y.
+Tests are written using [BATS](https://github.com/bats-core/bats). Each lib has a `lib-name.bats` file in [tests-for-this-repo](/tests-for-this-repo).
+Asserts are provided by [bats-assert-1](https://github.com/jasonkarns/bats-assert-1). Asserts provide useful debugging output when the assertion fails, eg expected x got y.
 
 Example:
 ```bash
