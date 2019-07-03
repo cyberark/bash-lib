@@ -1,8 +1,8 @@
-# Contibuting
+# Contributing
 Thanks for your interest in bash-lib. Before contributing, please take a
 moment to read and sign our [Contributor
 Agreement](CyberArk_Open_Source_Contributor_Agreement.pdf). This provides
-patent protection for all Secretless Broker users and allows CyberArk to
+patent protection for all bash-lib users and allows CyberArk to
 enforce its license terms. Please email a signed copy to <a
 href="oss@cyberark.com">oss@cyberark.com</a>
 
