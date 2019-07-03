@@ -76,9 +76,9 @@ files within it's directory.
 ├── run-tests # top level test script, executes all tests
 ├── secrets.yml # secrets required for executing tests
 ├── test-utils
-│   ├── bats # subtree
-│   ├── bats-assert-1 # subtree
-│   ├── bats-support # subtree
+│   ├── bats # git subtree
+│   ├── bats-assert-1 # git subtree
+│   ├── bats-support # git subtree
 │   ├── lib
 │   └── tap2junit
 └── tests-for-this-repo
@@ -90,14 +90,8 @@ files within it's directory.
     ├── python-lint # supporting files for python lint
     ├── run-bats-tests # script to run bats tests
     ├── run-gitleaks # script to check for leaked secrets
-    └──  run-python-lint # script to run python lint
+    └── run-python-lint # script to run python lint
 ```
-## Style Guide
-Follow the [google shell style guide](https://google.github.io/styleguide/shell.xml#Naming_Conventions).
-TL;DR:
-1. Use snake_case function and variable names
-1. Use `function` when declaring functions.
-
 
 ## Contents
 
@@ -179,50 +173,8 @@ TL;DR:
   </tbody>
 </table>
 
-# Contibuting
-Thanks for your interest in bash-lib. Before contributing, please take a
-moment to read and sign our [Contributor
-Agreement](CyberArk_Open_Source_Contributor_Agreement.pdf). This provides
-patent protection for all Secretless Broker users and allows CyberArk to
-enforce its license terms. Please email a signed copy to <a
-href="oss@cyberark.com">oss@cyberark.com</a>
-
-Contributed bash functions are most welcome! The more we share the less we
-duplicate each other. In order to keep this repo tidy, every function must be
-documented in the readme and tested, the lint scripts enforce these rules.
-
-1. Add the libraries or functions that you need
-1. Add BATS tests for all new top level functions
-1. Add descriptions for each function to the contents table in this readme
-1. Run ./run-tests to ensure all tests pass before submitting
-1. Create a PR
-1. Wait for review
-
-## Testing
-Tests are written using [BATS](https://github.com/bats-core/bats). Each lib has a `lib-name.bats` file in [tests-for-this-repo](/tests-for-this-repo).
-Asserts are provided by [bats-assert-1](https://github.com/jasonkarns/bats-assert-1). Asserts provide useful debugging output when the assertion fails, eg expected x got y.
-
-Example:
-```bash
-# source support and assert libraries
-. "${BASH_LIB_DIR}/test-utils/bats-support/load.bash"
-. "${BASH_LIB_DIR}/test-utils/bats-assert-1/load.bash"
-
-# source the library under test
-. "${BASH_LIB_DIR}/git/lib"
-
-# define a test that calls a library function
-@test "it does the thing" {
-  some_prep_work
-  # run is a wrapper that catches failures so that assertsions can be run,
-  # otherwise the test would immediately fail.
-  run does_the_thing
-  assert_success
-  assert_output "thing done"
-}
-```
-
-Test fixtures should go in /tests-for-this-repo/[fixtures](tests-for-this-repo/fixtures)/lib-name.
+# Contributing
+For further informaiton on contributing, style & testing, please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 # Maintainers
 * [Hugh Saunders](github.com/hughsaunders)
