@@ -177,4 +177,4 @@ files within it's directory.
 For further informaiton on contributing, style & testing, please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 # Maintainers
-* [Hugh Saunders](github.com/hughsaunders)
+* [Hugh Saunders](https://github.com/hughsaunders)
