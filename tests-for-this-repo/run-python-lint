@@ -5,7 +5,6 @@
 
 # shellcheck disable=SC2086,SC2046
 . $(dirname ${BASH_SOURCE[0]})/../init
-. "${BASH_LIB_DIR}/helpers/lib"
 
 rc=0
 

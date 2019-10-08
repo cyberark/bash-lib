@@ -18,3 +18,57 @@ function spushd(){
 function spopd(){
     popd >/dev/null || die "popd failed :("
 }
+
+# Retry a command multiple times until it succeeds, with escalating
+# delay between attempts.
+# Delay is 2 * n + random up to 30s, then 30s + random after that.
+# For large numbers of retries the max delay is effectively the retry
+# in minutes.
+# Based on:
+# https://gist.github.com/sj26/88e1c6584397bb7c13bd11108a579746
+# but now quite heavily modified.
+function retry {
+    # Maxiumum amount of fixed delay between attempts
+    # a random value will still be added.
+    local -r MAX_BACKOFF=30
+
+    if [[ ${#} -lt 2 ]]; then
+        echo "retry usage: retry <retries> <command>"
+        exit 1
+    fi
+
+    local retries=$1
+    shift
+
+    if ! [[ ${retries} =~ ^[0-9\.]*$ ]]; then
+        echo "Invalid number of retries: ${retries} for command '${*}'".
+        exit 1
+    fi
+
+    local count=0
+    until "$@"; do
+        # Command failed, otherwise until would have skipped the loop
+
+        # Store return code so it can be reported to the user
+        exit=$?
+        count=$((count + 1))
+        if [ "${count}" -lt "${retries}" ]; then
+            # There are still retries left, calculate delay and notify user.
+            backoff=$((2 * count))
+            if [[ "${backoff}" -gt "${MAX_BACKOFF}" ]]; then
+                backoff=${MAX_BACKOFF}
+            fi;
+
+            # Add a random amount to the delay to prevent competing processes
+            # from re-colliding.
+            wait=$(( backoff + (RANDOM % count) ))
+            echo "'${*}' Retry $count/$retries exited $exit, retrying in $wait seconds..."
+            sleep $wait
+        else
+            # Out of retries :(
+            echo "Retry $count/$retries exited $exit, no more retries left."
+            return $exit
+        fi
+    done
+    return 0
+}
