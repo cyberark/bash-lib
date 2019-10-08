@@ -1,7 +1,9 @@
 . "${BASH_LIB_DIR}/test-utils/bats-support/load.bash"
 . "${BASH_LIB_DIR}/test-utils/bats-assert-1/load.bash"
 
-. "${BASH_LIB_DIR}/k8s/lib"
+setup(){
+    . "${BASH_LIB_DIR}/init"
+}
 
 @test "gke-utils image builds" {
     run build_gke_image

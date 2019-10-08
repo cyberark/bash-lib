@@ -1,8 +1,6 @@
 . "${BASH_LIB_DIR}/test-utils/bats-support/load.bash"
 . "${BASH_LIB_DIR}/test-utils/bats-assert-1/load.bash"
-
-. "${BASH_LIB_DIR}/helpers/lib"
-. "${BASH_LIB_DIR}/test-utils/lib"
+. "${BASH_LIB_DIR}/init"
 
 docker_safe_tmp(){
     # neither mktemp -d not $BATS_TMPDIR

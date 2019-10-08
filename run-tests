@@ -4,7 +4,6 @@
 # is not assumed to have been run
 # shellcheck disable=SC2086
 . "$(dirname ${BASH_SOURCE[0]})/init"
-. "${BASH_LIB_DIR}/helpers/lib"
 
 # Run BATS Tests
 "${BASH_LIB_DIR}/tests-for-this-repo/run-bats-tests"

@@ -1,6 +1,5 @@
-. ${BASH_LIB_DIR}/git/lib
-. ${BASH_LIB_DIR}/test-utils/lib
-. ${BASH_LIB_DIR}/helpers/lib
+
+. "${BASH_LIB_DIR}/init"
 
 setup() {
     spushd ${BASH_LIB_DIR}
