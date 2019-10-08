@@ -125,7 +125,7 @@ files within it's directory.
           <li><b>remote_latest_tagged_commit</b>: Returns the SHA of the most recently tagged commit in a remote repo (<code>tag^{}</code>).</li>
           <li><b>remote_sha_for_ref</b>: Returns the SHA for a given ref from a named remote.</li>
           <li><b>remote_tag_for_sha</b>: Returns the tag corresponding to a SHA from a named remote - if there is one.</li>
-          <li>tracked_files_excluding_subtrees: List files tracked by git, but excluding any files that are in paths listed in <code>.gittrees</code>.</li>
+          <li><b>tracked_files_excluding_subtrees</b>: List files tracked by git, but excluding any files that are in paths listed in <code>.gittrees</code>.</li>
           <li><b>cat_gittrees</b>: Returns the contents of .gittrees from the top level of the repo, excluding any comments. Fails if .gittrees is not present.</li>
         </ol>
       </td>
@@ -174,7 +174,7 @@ files within it's directory.
 </table>
 
 # Contributing
-For further informaiton on contributing, style & testing, please see [CONTRIBUTING.md](CONTRIBUTING.md)
+For further information on contributing, style & testing, please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 # Maintainers
 * [Hugh Saunders](https://github.com/hughsaunders)
