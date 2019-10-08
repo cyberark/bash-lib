@@ -1,10 +1,16 @@
 . "${BASH_LIB_DIR}/test-utils/bats-support/load.bash"
 . "${BASH_LIB_DIR}/test-utils/bats-assert-1/load.bash"
 
-. "${BASH_LIB_DIR}/filehandling/lib"
+. "${BASH_LIB_DIR}/init"
 
 @test "abs_path returns absolute path for PWD" {
     run abs_path .
+    assert_output $PWD
+    assert_success
+}
+
+@test "abs_path returns PWD when no arg specified" {
+    run abs_path
     assert_output $PWD
     assert_success
 }

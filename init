@@ -20,14 +20,14 @@ BASH_LIB_DIR="${BASH_LIB_DIR_RELATIVE}"
 
 # Load the filehandling module for the abspath
 # function
-. "${BASH_LIB_DIR_RELATIVE}/filehandling/lib"
+for lib in helpers logging filehandling git k8s test-utils; do
+    . "${BASH_LIB_DIR_RELATIVE}/${lib}/lib"
+done
 
 # Export the absolute path
 # shellcheck disable=SC2086
 BASH_LIB_DIR="$(abs_path ${BASH_LIB_DIR_RELATIVE})"
 export BASH_LIB_DIR
-
-. "${BASH_LIB_DIR}/helpers/lib"
 
 # Update Submodules
 spushd "${BASH_LIB_DIR}"

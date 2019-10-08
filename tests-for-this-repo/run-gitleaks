@@ -6,8 +6,6 @@
 # is not assumed to have been run
 # shellcheck disable=SC2086,SC2046
 . $(dirname "${BASH_SOURCE[0]}")/../init
-. "${BASH_LIB_DIR}/test-utils/lib"
-. "${BASH_LIB_DIR}/helpers/lib"
 
 docker run \
     --rm \

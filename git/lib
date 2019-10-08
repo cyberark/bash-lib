@@ -1,7 +1,6 @@
 #!/bin/bash
 
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
-. "${BASH_LIB_DIR}/helpers/lib"
 
 # Get the top level of a git repo
 function repo_root(){

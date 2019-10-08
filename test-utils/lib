@@ -1,11 +1,9 @@
 #!/bin/bash
 
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
-. "${BASH_LIB_DIR}/git/lib"
-. "${BASH_LIB_DIR}/helpers/lib"
 
-readonly SHELLCHECK_IMAGE="${SHELLCHECK_IMAGE:-koalaman/shellcheck}"
-readonly SHELLCHECK_TAG="${SHELLCHECK_TAG:-v0.6.0}"
+SHELLCHECK_IMAGE="${SHELLCHECK_IMAGE:-koalaman/shellcheck}"
+SHELLCHECK_TAG="${SHELLCHECK_TAG:-v0.6.0}"
 
 # Check a single shell script for syntax
 # and common errors.

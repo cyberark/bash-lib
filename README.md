@@ -136,6 +136,7 @@ files within it's directory.
         <ol>
           <li><b>die</b>: print message and exit 1</li>
           <li><b>spushd/spopd</b>: Safe verisons of pushd & popd that call die if the push/pop fails, they also drop stdout. </li>
+          <li><b>retry</b>: Retry a command until it succeeds up to a user specified maximum number of attempts. Escalating delay between attempts.</li>
         </ol>
       </td>
     </tr>
