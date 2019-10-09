@@ -24,6 +24,9 @@ for lib in helpers logging filehandling git k8s test-utils; do
     . "${BASH_LIB_DIR_RELATIVE}/${lib}/lib"
 done
 
+# Export functions to subshells
+eval "$(declare -F | sed -e 's/-f /-fx /')"
+
 # Export the absolute path
 # shellcheck disable=SC2086
 BASH_LIB_DIR="$(abs_path ${BASH_LIB_DIR_RELATIVE})"
