@@ -46,7 +46,7 @@ function retry {
     fi
 
     local count=0
-    until "$@"; do
+    until eval "$@"; do
         # Command failed, otherwise until would have skipped the loop
 
         # Store return code so it can be reported to the user
