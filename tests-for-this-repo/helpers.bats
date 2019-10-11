@@ -111,4 +111,8 @@ teardown(){
     assert [ ! -e "${temp_dir}/appendfile" ]
 }
 
-
+@test "retry succeeds with compound statements" {
+    run retry 3 "true && date >> ${afile}"
+    assert_success
+    assert_equal $(wc -l <${afile}) 1
+}
