@@ -1,4 +1,7 @@
 # bash-lib
+
+Introductory blog post: https://www.conjur.org/blog/stop-bashing-bash/
+
 ```
                    _______________  _______________
                  .'               .'               .|
