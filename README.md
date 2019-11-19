@@ -46,7 +46,7 @@ See the [license file](LICENSE)
 
 Add bash-lib into your project in the way that best fits your workflow. The only requirement is that you **pin the version of
 bash-lib that you use**. This is important so that changes to bash-lib do not have the power to break all projects that use
-bash-lib. Your project can then test updates to bash-lib and roll forward periodicly.
+bash-lib. Your project can then test updates to bash-lib and roll forward periodically.
 
 Options:
 * Add a submodule: they are an easy way to integrate bash-lib and automatically use a single SHA until manually updated. Submodules add a pointer from a mount point in your repo to the external repo (bash-lib), and require workflow changes to ensure that pointer is derferenced during clone, checkout and some other opertaions.
