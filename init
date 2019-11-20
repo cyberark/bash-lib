@@ -1,9 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Initialisation Functions for the
 ## Conjurinc Bash Library
 
-# Shell Options
+if (( ${BASH_VERSINFO[0]} < 4 )); then
+    echo "Bash Lib requires bash v4 or greater"
+    echo "Current Bash Version: ${BASH_VERSION}"
+    exit 1
+fi
+
+# Shell Otions
 set -euo pipefail
 
 # This script should be sourced before any of
