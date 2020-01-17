@@ -2,7 +2,7 @@
 . "${BASH_LIB_DIR}/test-utils/bats-assert-1/load.bash"
 . "${BASH_LIB_DIR}/init"
 
-docker_safe_tmp(){
+bl_docker_safe_tmp(){
     # neither mktemp -d not $BATS_TMPDIR
     # produce dirs that docker can mount from
     # in macos.
@@ -14,34 +14,34 @@ docker_safe_tmp(){
     echo "${tmp_dir}"
 }
 
-@test "shellcheck notices compile error" {
-    tmp_dir="$(docker_safe_tmp)"
-    spushd "${tmp_dir}"
+@test "bl_shellcheck notices compile error" {
+    tmp_dir="$(bl_docker_safe_tmp)"
+    bl_spushd "${tmp_dir}"
 
     echo "'" > bad_script
-    run shellcheck_script bad_script
+    run bl_shellcheck_script bad_script
     assert_failure
     assert_output --partial "syntax error"
 
-    spopd
+    bl_spopd
     rm -rf "/tmp/${tmp_dir#/tmp/}"
 }
 
 @test "shellcheck passes good script" {
-    tmp_dir="$(docker_safe_tmp)"
-    spushd "${tmp_dir}"
+    tmp_dir="$(bl_docker_safe_tmp)"
+    bl_spushd "${tmp_dir}"
 
     echo -e "#!/bin/bash\n:" > good_script
-    run shellcheck_script good_script
+    run bl_shellcheck_script good_script
     rm -rf "${tmp_dir}"
     assert_output --partial "Checking good_script"
     assert_success
 
-    spopd
+    bl_spopd
     rm -rf "/tmp/${tmp_dir#/tmp/}"
 }
 
-@test "find_scripts finds git tracked files containing bash shebang" {
+@test "bl_find_scripts finds git tracked files containing bash shebang" {
     tmp_dir="${BATS_TMPDIR}/ffgtfwse"
     rm -rf "${tmp_dir}"
     mkdir -p "${tmp_dir}"
@@ -58,20 +58,20 @@ docker_safe_tmp(){
         git add a c
         git commit -a -m "initial"
 
-        run find_scripts
+        run bl_find_scripts
         assert_output "a"
         assert_success
     popd
 }
 
-@test "tap2junit correctly converts test file" {
+@test "bl_tap2junit correctly converts test file" {
     rc=0
     fdir="${BASH_LIB_DIR}/tests-for-this-repo/fixtures/test-utils"
     # Can't use run / assert_output here
     # because assert_output uses $output
     # which is a combination of stdout and stderr
     # and we are only interested in stdout.
-    stdout=$(tap2junit < "${fdir}/tap2junit.in")
+    stdout=$(bl_tap2junit < "${fdir}/tap2junit.in")
     rc=${?}
     assert_equal "${stdout}" "$(cat ${fdir}/tap2junit.out)"
     assert_equal "${rc}" "0"

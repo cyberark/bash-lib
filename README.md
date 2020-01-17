@@ -113,7 +113,7 @@ files within it's directory.
       <td>Functions relating to file and path handling
       <td>
         <ol>
-          <li> <b>abs_path</b>: Ensure a path is absolute</li>
+          <li><b>bl_abs_path</b>: Ensure a path is absolute</li>
         </ol>
       </td>
     </tr>
@@ -122,14 +122,14 @@ files within it's directory.
       <td>Git helpers</td>
       <td>
         <ol>
-          <li><b>repo_root</b>: Find the root of the current git repo.</li>
-          <li><b>all_files_in_repo</b>: List files tracked by git.</li>
-          <li><b>remote_latest_tag</b>: Returns the symbolic name of the latest tag from a remote.</li>
-          <li><b>remote_latest_tagged_commit</b>: Returns the SHA of the most recently tagged commit in a remote repo (<code>tag^{}</code>).</li>
-          <li><b>remote_sha_for_ref</b>: Returns the SHA for a given ref from a named remote.</li>
-          <li><b>remote_tag_for_sha</b>: Returns the tag corresponding to a SHA from a named remote - if there is one.</li>
-          <li><b>tracked_files_excluding_subtrees</b>: List files tracked by git, but excluding any files that are in paths listed in <code>.gittrees</code>.</li>
-          <li><b>cat_gittrees</b>: Returns the contents of .gittrees from the top level of the repo, excluding any comments. Fails if .gittrees is not present.</li>
+          <li><b>bl_repo_root</b>: Find the root of the current git repo.</li>
+          <li><b>bl_all_files_in_repo</b>: List files tracked by git.</li>
+          <li><b>bl_remote_latest_tag</b>: Returns the symbolic name of the latest tag from a remote.</li>
+          <li><b>bl_remote_latest_tagged_commit</b>: Returns the SHA of the most recently tagged commit in a remote repo (<code>tag^{}</code>).</li>
+          <li><b>bl_remote_sha_for_ref</b>: Returns the SHA for a given ref from a named remote.</li>
+          <li><b>bl_remote_tag_for_sha</b>: Returns the tag corresponding to a SHA from a named remote - if there is one.</li>
+          <li><b>bl_tracked_files_excluding_subtrees</b>: List files tracked by git, but excluding any files that are in paths listed in <code>.gittrees</code>.</li>
+          <li><b>bl_cat_gittrees</b>: Returns the contents of .gittrees from the top level of the repo, excluding any comments. Fails if .gittrees is not present.</li>
         </ol>
       </td>
     </tr>
@@ -137,9 +137,12 @@ files within it's directory.
       <td>Bash scripting helpers</td>
       <td>
         <ol>
-          <li><b>die</b>: print message and exit 1</li>
-          <li><b>spushd/spopd</b>: Safe verisons of pushd & popd that call die if the push/pop fails, they also drop stdout. </li>
-          <li><b>retry</b>: Retry a command until it succeeds up to a user specified maximum number of attempts. Escalating delay between attempts.</li>
+          <li><b>bl_die</b>: print message and exit 1</li>
+          <li><b>bl_spushd/bl_spopd</b>: Safe verisons of pushd & popd that call die if the push/pop fails, they also drop stdout. </li>
+          <li><b>bl_is_num</b>: Check if a value is a number via regex</li>
+          <li><b>bl_retry</b>: Retry a command until it succeeds up to a user specified maximum number of attempts. Escalating delay between attempts.</li>
+          <li><b>bl_retry_constant</b>: Retry a command until it succeeds with a
+          constant delay between attempts</li>
         </ol>
       </td>
     </tr>
@@ -148,18 +151,26 @@ files within it's directory.
       <td>Utils for connecting to K8s</td>
       <td>
         <ol>
-          <li><b>build_gke_image</b>: Build docker image for running kubectl commands against GKE.</li>
-          <li><b>delete_gke_image</b>: Delete image from GKE.</li>
-          <li><b>run_docker_gke_command</b>: Run command in gke-utils container, already authenticated to k8s cluster.</li>
+          <li><b>bl_build_gke_image</b>: Build docker image for running kubectl commands against GKE.</li>
+          <li><b>bl_delete_gke_image</b>: Delete image from GKE.</li>
+          <li><b>bl_run_docker_gke_command</b>: Run command in gke-utils container, already authenticated to k8s cluster.</li>
         </ol>
       </td>
     </tr>
     <tr>
       <td><a href="logging/lib">logging</a></td>
-      <td>Helpers related to login</td>
+      <td>Helpers related to logging.</td>
       <td>
         <ol>
-          <li><b>announce</b>: Echo message in ascii banner to distinguish it from other log messages.</li>
+          <li><b>bl_announce</b>: Echo message in ascii banner to distinguish it from other log messages.</li>
+          <li><b>bl_log</b>: Log a message at the specified level. Default log level is info, change level by setting environment variable BASH_LIB_LOG_LEVEL</li>
+          <li><b>bl_check_log_level</b>: Check if a value is a valid bash lib
+          log level</li>
+          <li><b>bl_debug</b>: Log a message at debug level</li>
+          <li><b>bl_info</b>: Log a message at info level</li>
+          <li><b>bl_warning</b>: Log a message at warning level</li>
+          <li><b>bl_error</b>: Log a message at error level</li>
+          <li><b>bl_fatal</b>: Log a message at fatal level</li>
         </ol>
       </td>
     </tr>
@@ -168,9 +179,9 @@ files within it's directory.
       <td>Helpers for executing tests</td>
       <td>
         <ol>
-          <li><b>shellcheck_script</b>: Execute shellcheck against a script, uses docker.</li>
-          <li><b>find_scripts</b>: Find git tracked files with extension.</li>
-          <li><b>tap2junit</b>: Convert a subset of <a href="http://testanything.org/">TAP</a> to JUnit XML. Retains logs for errors.</li>
+          <li><b>bl_shellcheck_script</b>: Execute shellcheck against a script, uses docker.</li>
+          <li><b>bl_find_scripts</b>: Find git tracked files with extension.</li>
+          <li><b>bl_tap2junit</b>: Convert a subset of <a href="http://testanything.org/">TAP</a> to JUnit XML. Retains logs for errors.</li>
         </ol>
       </td>
     </tr>

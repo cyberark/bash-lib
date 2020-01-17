@@ -3,7 +3,7 @@
 ## Initialisation Functions for the
 ## Conjurinc Bash Library
 
-if (( ${BASH_VERSINFO[0]} < 4 )); then
+if (( BASH_VERSINFO[0] < 4 )); then
     echo "Bash Lib requires bash v4 or greater"
     echo "Current Bash Version: ${BASH_VERSION}"
     exit 1
@@ -30,17 +30,17 @@ for lib in helpers logging filehandling git k8s test-utils; do
     . "${BASH_LIB_DIR_RELATIVE}/${lib}/lib"
 done
 
-# Export functions to subshells
-eval "$(declare -F | sed -e 's/-f /-fx /')"
+# Filter functions and re export only bash-lib functions to subshells
+eval "$(declare -F | sed -e 's/-f /-fx /' | grep 'x bl_')"
 
 # Export the absolute path
 # shellcheck disable=SC2086
-BASH_LIB_DIR="$(abs_path ${BASH_LIB_DIR_RELATIVE})"
+BASH_LIB_DIR="$(bl_abs_path ${BASH_LIB_DIR_RELATIVE})"
 export BASH_LIB_DIR
 
 # Update Submodules
-spushd "${BASH_LIB_DIR}"
+bl_spushd "${BASH_LIB_DIR}"
     git submodule update --init --recursive
-spopd
+bl_spopd
 
 export BATS_CMD="${BASH_LIB_DIR}/test-utils/bats/bin/bats"

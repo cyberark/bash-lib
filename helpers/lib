@@ -2,25 +2,25 @@
 
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
-function die(){
+function bl_die(){
     echo "${@}"
     exit 1
 }
 
 #safe pushd
-function spushd(){
+function bl_spushd(){
     if ! pushd "${1}" >/dev/null; then
         die "pushd ${1} failed :("
     fi
 }
 
 #safe popd
-function spopd(){
-    popd >/dev/null || die "popd failed :("
+function bl_spopd(){
+    popd >/dev/null || bl_die "popd failed :("
 }
 
 # Test if a variable contains a number
-function is_num(){
+function bl_is_num(){
     [[ ${1:-invalid} =~ ^-?[0-9\.]*$ ]]
 }
 
@@ -32,7 +32,7 @@ function is_num(){
 # Based on:
 # https://gist.github.com/sj26/88e1c6584397bb7c13bd11108a579746
 # but now quite heavily modified.
-function retry {
+function bl_retry {
     # Maxiumum amount of fixed delay between attempts
     # a random value will still be added.
     local -r MAX_BACKOFF=30
@@ -45,7 +45,7 @@ function retry {
     local retries=$1
     shift
 
-    if ! is_num "${retries}"; then
+    if ! bl_is_num "${retries}"; then
         echo "Invalid number of retries: ${retries} for command '${*}'".
         exit 1
     fi
@@ -79,7 +79,7 @@ function retry {
 }
 
 # retry function that waits a constant number of seconds between attempts.
-function retry_constant {
+function bl_retry_constant {
     if [[ ${#} -lt 3 ]]; then
         echo "retry usage: retry <retries> <interval (seconds)> <command>"
         exit 1
@@ -88,12 +88,12 @@ function retry_constant {
     local retries=$1; shift
     local interval=$1; shift
 
-    if ! is_num "${retries}"; then
+    if ! bl_is_num "${retries}"; then
         echo "Invalid number of retries: ${retries} for command '${*}'".
         exit 1
     fi
 
-    if ! is_num "${interval}"; then
+    if ! bl_is_num "${interval}"; then
         echo "Invalid interval in seconds: ${retries} for command '${*}'".
         exit 1
     fi

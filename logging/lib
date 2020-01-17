@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
-
-echo $BASH_VERSION
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
 export BASH_LIB_LOG_LEVEL=info
-declare -A BASH_LIB_LOG_LEVELS=([debug]=1 [info]=2 [warn]=3 [error]=4 [fatal]=5 )
-declare -A BASH_LIB_LOG_COLOURS=( [debug]="0;37;40" [info]="0;36;40" [warn]="0;33;40" [error]="1;31;40" [fatal]="1;37;41" )
 
 # Add logging functions here
 
-function announce() {
+function bl_announce() {
   echo "++++++++++++++++++++++++++++++++++++++"
   echo " "
   echo "$@"
@@ -17,7 +13,7 @@ function announce() {
   echo "++++++++++++++++++++++++++++++++++++++"
 }
 
-function check_log_level(){
+function bl_check_log_level(){
   level="${1}"
   if [[ ${level} =~ debug|info|warn|error|fatal ]];
   then
@@ -28,36 +24,38 @@ function check_log_level(){
   fi
 }
 
-function log {
+function bl_log {
+  declare -A BASH_LIB_LOG_LEVELS=( [debug]=1 [info]=2 [warn]=3 [error]=4 [fatal]=5 )
+  declare -A BASH_LIB_LOG_COLOURS=( [debug]="0;37;40" [info]="0;36;40" [warn]="0;33;40" [error]="1;31;40" [fatal]="1;37;41" )
   runtime_log_level="${BASH_LIB_LOG_LEVEL}"
   write_log_level="${1}"
   msg="${2}"
 
-  check_log_level "${runtime_log_level}"
-  check_log_level "${write_log_level}"
+  bl_check_log_level "${runtime_log_level}"
+  bl_check_log_level "${write_log_level}"
 
-  if (( ${BASH_LIB_LOG_LEVELS[${write_log_level}]} >= ${BASH_LIB_LOG_LEVELS[${runtime_log_level}]} )); then
+  if (( BASH_LIB_LOG_LEVELS[write_log_level] >= BASH_LIB_LOG_LEVELS[runtime_log_level] )); then
     echo -e "\e[${BASH_LIB_LOG_COLOURS[${write_log_level}]}m${msg}\e[0m"
   fi
 }
 
-function debug(){
-  log debug "${*}"
+function bl_debug(){
+  bl_log debug "${*}"
 }
 
-function info(){
-  log info "${*}"
+function bl_info(){
+  bl_log info "${*}"
 }
 
-function warn(){
-  log warn "${*}"
+function bl_warn(){
+  bl_log warn "${*}"
 }
 
-function error(){
-  log error "${*}"
+function bl_error(){
+  bl_log error "${*}"
 }
 
-function fatal(){
-  log fatal "${*}"
+function bl_fatal(){
+  bl_log fatal "${*}"
 }
 

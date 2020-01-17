@@ -13,11 +13,11 @@ set +eu
 
 # Check vital tools are installed
 if ! command -v summon >/dev/null; then
-    die "Summon must be installed and configured in order to run tests"
+    bl_die "Summon must be installed and configured in order to run tests"
 fi
 
 if ! command -v docker >/dev/null; then
-    die "Docker must be installed and configured in order to run tests"
+    bl_die "Docker must be installed and configured in order to run tests"
 fi
 
 # could be tap, junit or pretty
@@ -61,7 +61,7 @@ esac
 if [[ "${BATS_OUTPUT_FORMAT}" == junit ]]; then
     # Run tap2junit docker image to convert BATS TAP output to Junit for consumption by jenkins
     readonly  JUNIT_FILE="${BASH_LIB_DIR}/${BATS_SUITE}-junit.xml"
-    tap2junit < "${TAP_FILE}" > "${JUNIT_FILE}"
+    bl_tap2junit < "${TAP_FILE}" > "${JUNIT_FILE}"
     echo "Junit output written to ${JUNIT_FILE}"
 fi
 
