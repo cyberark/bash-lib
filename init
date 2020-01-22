@@ -3,7 +3,7 @@
 ## Initialisation Functions for the
 ## Conjurinc Bash Library
 
-# Shell Otions
+# Shell Options
 set -euo pipefail
 
 # This script should be sourced before any of
