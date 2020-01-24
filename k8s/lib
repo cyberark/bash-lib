@@ -4,17 +4,17 @@
 
 # Sets additional required environment variables that aren't available in the
 # secrets.yml file, and performs other preparatory steps
-function build_gke_image() {
+function bl_build_gke_image() {
   local image="gke-utils:latest"
   local rc=0
   docker rmi ${image} || true
-  spushd "${BASH_LIB_DIR}/k8s"
+  bl_spushd "${BASH_LIB_DIR}/k8s"
     # Prepare Docker images
     docker build --tag "${image}"\
       --build-arg KUBECTL_CLI_URL="${KUBECTL_CLI_URL}" \
       . 1>&2
     rc=${?}
-  spopd
+  bl_spopd
 
   return ${rc}
 }
@@ -22,15 +22,15 @@ function build_gke_image() {
 # Delete an image from GCR, unless it is has multiple tags pointing to it
 # This means another parallel build is using the image and we should
 # just untag it to be deleted by the later job
-function delete_gke_image() {
+function bl_delete_gke_image() {
   local image_and_tag="${1}"
 
-  run_docker_gke_command "
+  bl_run_docker_gke_command "
     gcloud container images delete --force-delete-tags -q ${image_and_tag}
   "
 }
 
-function run_docker_gke_command() {
+function bl_run_docker_gke_command() {
   docker run --rm \
     -i \
     -e DOCKER_REGISTRY_URL \

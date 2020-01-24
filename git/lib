@@ -3,18 +3,18 @@
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
 # Get the top level of a git repo
-function repo_root(){
+function bl_repo_root(){
     git rev-parse --show-toplevel
 }
 
 # List files tracked by git
-function all_files_in_repo(){
+function bl_all_files_in_repo(){
     git ls-tree -r HEAD --name-only
 }
 
 # Find the latest tag available at a repo url
 # Returns tag name, not sha
-function remote_latest_tag(){
+function bl_remote_latest_tag(){
     local -r remote_url="${1}"
     # In ls-remote the ^{} suffix refers to a peeled/dereferenced object.
     # eg refs/tags/v0.0.1^{} shows the SHA of the commit that was tagged,
@@ -28,13 +28,13 @@ function remote_latest_tag(){
 }
 
 # Find the SHA of the latests commit to be tagged in a remote repo
-function remote_latest_tagged_commit(){
+function bl_remote_latest_tagged_commit(){
     local -r remote="${1}"
-    local -r tag="$(remote_latest_tag "${remote}")"
+    local -r tag="$(bl_remote_latest_tag "${remote}")"
     git ls-remote "${remote}" | awk "/refs\/tags\/${tag}\^/{print \$1}"
 }
 
-function remote_sha_for_ref(){
+function bl_remote_sha_for_ref(){
     local -r remote="${1}"
     local -r ref="${2}"
 
@@ -54,7 +54,7 @@ function remote_sha_for_ref(){
     fi
 }
 
-function remote_tag_for_sha(){
+function bl_remote_tag_for_sha(){
     local -r remote="${1}"
     local -r sha="${2}"
     git ls-remote "${remote}" \
@@ -64,15 +64,15 @@ function remote_tag_for_sha(){
 
 ## Minimal git subtree functionality required for tests to pass
 # full subtree functionality is not ready for merge.
-function cat_gittrees(){
-    local -r git_trees="$(repo_root)/.gittrees"
+function bl_cat_gittrees(){
+    local -r git_trees="$(bl_repo_root)/.gittrees"
     local -r subtrees_file_format=".gittrees should contain one subtree per line,\
 space seperated with three fields: subtree_path renmote_url remote_name"
-    [[ -e "${git_trees}" ]] || die ".gittrees file ${git_trees} not found. ${subtrees_file_format}"
-    grep -E -v '^\s*$|^\s*#' "$(repo_root)/.gittrees"
+    [[ -e "${git_trees}" ]] || bl_die ".gittrees file ${git_trees} not found. ${subtrees_file_format}"
+    grep -E -v '^\s*$|^\s*#' "$(bl_repo_root)/.gittrees"
 }
 
-function tracked_files_excluding_subtrees(){
-    subtrees="$(cat_gittrees | awk '{print $1}' | paste -sd '|' -)"
-    all_files_in_repo | grep -E -v "${subtrees}"
+function bl_tracked_files_excluding_subtrees(){
+    subtrees="$(bl_cat_gittrees | awk '{print $1}' | paste -sd '|' -)"
+    bl_all_files_in_repo | grep -E -v "${subtrees}"
 }

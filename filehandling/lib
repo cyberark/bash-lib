@@ -3,7 +3,7 @@
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
 #https://stackoverflow.com/a/23002317
-function abs_path() {
+function bl_abs_path() {
     # generate absolute path from relative path
     # path     : relative filename
     # return : absolute path
@@ -14,13 +14,13 @@ function abs_path() {
     fi
     if [ -d "${path}" ]; then
         # dir
-        (spushd "${path}"; pwd)
+        (bl_spushd "${path}"; pwd)
     elif [ -f "${path}" ]; then
         # file
         if [[ ${path} = /* ]]; then
             echo "${path}"
         elif [[ ${path} == */* ]]; then
-            echo "$(spushd "${path%/*}"; pwd)/${path##*/}"
+            echo "$(bl_spushd "${path%/*}"; pwd)/${path##*/}"
         else
             echo "$(pwd)/${path}"
         fi

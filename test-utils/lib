@@ -7,7 +7,7 @@ SHELLCHECK_TAG="${SHELLCHECK_TAG:-v0.6.0}"
 
 # Check a single shell script for syntax
 # and common errors.
-function shellcheck_script(){
+function bl_shellcheck_script(){
     # NOTE (HughSaunders): I tried using the checkstyle output of
     # _shellcheck along with a checkstyle2junit xslt stylesheet
     # from the shellcheck author. However Jenkins only reported
@@ -30,19 +30,19 @@ function shellcheck_script(){
     fi
 }
 
-function find_scripts(){
-    tracked_files_excluding_subtrees \
+function bl_find_scripts(){
+    bl_tracked_files_excluding_subtrees \
         | while read -r file; do
             grep --files-with-match '^#!.*bash' "${file}" || true
         done
 }
 
-function tap2junit(){
+function bl_tap2junit(){
     local -r suite="${1:-BATS}"
 
-    spushd "${BASH_LIB_DIR}/test-utils/tap2junit"
+    bl_spushd "${BASH_LIB_DIR}/test-utils/tap2junit"
         docker build . -t tap-junit 1>&2
-    spopd
+    bl_spopd
 
     # Run tap-junit docker image to convert BATS TAP output to Junit for consumption by jenkins
     # filters stdin to stdout

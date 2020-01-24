@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script is an entry point, so init
 # is not assumed to have been run
@@ -8,12 +8,12 @@
 
 rc=0
 
-spushd ${BASH_LIB_DIR}/tests-for-this-repo/python-lint
+bl_spushd ${BASH_LIB_DIR}/tests-for-this-repo/python-lint
     docker build . -t pytest-flake8
     if ! docker run --rm -v "${BASH_LIB_DIR}:/mnt" pytest-flake8; then
         rc=1
     fi
     mv "${BASH_LIB_DIR}/junit.xml" "${BASH_LIB_DIR}/python-lint-junit.xml"
-spopd
+bl_spopd
 
 exit ${rc}

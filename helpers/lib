@@ -2,32 +2,37 @@
 
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
-function die(){
+function bl_die(){
     echo "${@}"
     exit 1
 }
 
 #safe pushd
-function spushd(){
+function bl_spushd(){
     if ! pushd "${1}" >/dev/null; then
         die "pushd ${1} failed :("
     fi
 }
 
 #safe popd
-function spopd(){
-    popd >/dev/null || die "popd failed :("
+function bl_spopd(){
+    popd >/dev/null || bl_die "popd failed :("
+}
+
+# Test if a variable contains a number
+function bl_is_num(){
+    [[ ${1:-invalid} =~ ^-?[0-9\.]*$ ]]
 }
 
 # Retry a command multiple times until it succeeds, with escalating
 # delay between attempts.
 # Delay is 2 * n + random up to 30s, then 30s + random after that.
 # For large numbers of retries the max delay is effectively the retry
-# in minutes.
+# count in minutes.
 # Based on:
 # https://gist.github.com/sj26/88e1c6584397bb7c13bd11108a579746
 # but now quite heavily modified.
-function retry {
+function bl_retry {
     # Maxiumum amount of fixed delay between attempts
     # a random value will still be added.
     local -r MAX_BACKOFF=30
@@ -40,7 +45,7 @@ function retry {
     local retries=$1
     shift
 
-    if ! [[ ${retries} =~ ^[0-9\.]*$ ]]; then
+    if ! bl_is_num "${retries}"; then
         echo "Invalid number of retries: ${retries} for command '${*}'".
         exit 1
     fi
@@ -64,6 +69,45 @@ function retry {
             wait=$(( backoff + (RANDOM % count) ))
             echo "'${*}' Retry $count/$retries exited $exit, retrying in $wait seconds..."
             sleep $wait
+        else
+            # Out of retries :(
+            echo "Retry $count/$retries exited $exit, no more retries left."
+            return $exit
+        fi
+    done
+    return 0
+}
+
+# retry function that waits a constant number of seconds between attempts.
+function bl_retry_constant {
+    if [[ ${#} -lt 3 ]]; then
+        echo "retry usage: retry <retries> <interval (seconds)> <command>"
+        exit 1
+    fi
+
+    local retries=$1; shift
+    local interval=$1; shift
+
+    if ! bl_is_num "${retries}"; then
+        echo "Invalid number of retries: ${retries} for command '${*}'".
+        exit 1
+    fi
+
+    if ! bl_is_num "${interval}"; then
+        echo "Invalid interval in seconds: ${retries} for command '${*}'".
+        exit 1
+    fi
+
+    local count=0
+    until eval "$@"; do
+        # Command failed, otherwise until would have skipped the loop
+
+        # Store return code so it can be reported to the user
+        exit=$?
+        count=$((count + 1))
+        if [ "${count}" -lt "${retries}" ]; then
+            echo "'${*}' Retry $count/$retries exited $exit, retrying in $interval seconds..."
+            sleep "${interval}"
         else
             # Out of retries :(
             echo "Retry $count/$retries exited $exit, no more retries left."
