@@ -30,6 +30,12 @@ teardown() {
     assert_output --partial test
 }
 
+@test "bl_log outputs mesage when stderr is selected. Note: bats combines stdout and stderr" {
+    run bl_log info test stderr
+    assert_success
+    assert_output --partial "test"
+}
+
 @test "bl_debug doesn't output anything using the default info level" {
     run bl_debug foo
     assert_success

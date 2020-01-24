@@ -129,6 +129,7 @@ files within it's directory.
           <li><b>bl_remote_sha_for_ref</b>: Returns the SHA for a given ref from a named remote.</li>
           <li><b>bl_remote_tag_for_sha</b>: Returns the tag corresponding to a SHA from a named remote - if there is one.</li>
           <li><b>bl_tracked_files_excluding_subtrees</b>: List files tracked by git, but excluding any files that are in paths listed in <code>.gittrees</code>.</li>
+          <li><b>bl_gittrees_present</b>: Succeeds if .gittrees is present in the root of the repo, otherwise fails.</li>
           <li><b>bl_cat_gittrees</b>: Returns the contents of .gittrees from the top level of the repo, excluding any comments. Fails if .gittrees is not present.</li>
         </ol>
       </td>
