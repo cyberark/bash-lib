@@ -30,11 +30,21 @@ function bl_log {
   runtime_log_level="${BASH_LIB_LOG_LEVEL}"
   write_log_level="${1}"
   msg="${2}"
+  out="${3:-stdout}"
 
   bl_check_log_level "${runtime_log_level}"
   bl_check_log_level "${write_log_level}"
 
-  if (( BASH_LIB_LOG_LEVELS[write_log_level] >= BASH_LIB_LOG_LEVELS[runtime_log_level] )); then
+  runtime_level_num="${BASH_LIB_LOG_LEVELS[${runtime_log_level}]}"
+  write_level_num="${BASH_LIB_LOG_LEVELS[${write_log_level}]}"
+
+  if (( write_level_num < runtime_level_num )); then
+    return
+  fi
+
+  if [[ "${out}" == "stderr" ]]; then
+    echo -e "\e[${BASH_LIB_LOG_COLOURS[${write_log_level}]}m${msg}\e[0m" 1>&2
+  else
     echo -e "\e[${BASH_LIB_LOG_COLOURS[${write_log_level}]}m${msg}\e[0m"
   fi
 }

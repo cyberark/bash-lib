@@ -100,6 +100,19 @@ teardown(){
     assert_success
 }
 
+@test "bl_gittrees_present succeeds when .gittrees file is present" {
+    touch .gittrees
+    run bl_gittrees_present
+    assert_success
+    assert_output ""
+}
+
+@test "bl_gittrees_present fails when .gittrees file is not present" {
+    run bl_gittrees_present
+    assert_failure
+    assert_output ""
+}
+
 @test "bl_cat_gittrees dies when gittrees doesn't exist" {
     run bl_cat_gittrees
     assert_failure

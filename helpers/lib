@@ -3,14 +3,14 @@
 : "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
 
 function bl_die(){
-    echo "${@}"
+    bl_fatal "${@}"
     exit 1
 }
 
 #safe pushd
 function bl_spushd(){
     if ! pushd "${1}" >/dev/null; then
-        die "pushd ${1} failed :("
+        bl_die "pushd ${1} failed :("
     fi
 }
 
@@ -38,16 +38,14 @@ function bl_retry {
     local -r MAX_BACKOFF=30
 
     if [[ ${#} -lt 2 ]]; then
-        echo "retry usage: retry <retries> <command>"
-        exit 1
+        bl_die "retry usage: retry <retries> <command>"
     fi
 
     local retries=$1
     shift
 
     if ! bl_is_num "${retries}"; then
-        echo "Invalid number of retries: ${retries} for command '${*}'".
-        exit 1
+        bl_die "Invalid number of retries: ${retries} for command '${*}'".
     fi
 
     local count=0
@@ -67,11 +65,11 @@ function bl_retry {
             # Add a random amount to the delay to prevent competing processes
             # from re-colliding.
             wait=$(( backoff + (RANDOM % count) ))
-            echo "'${*}' Retry $count/$retries exited $exit, retrying in $wait seconds..."
+            bl_info "'${*}' Retry $count/$retries exited $exit, retrying in $wait seconds..."
             sleep $wait
         else
             # Out of retries :(
-            echo "Retry $count/$retries exited $exit, no more retries left."
+            bl_error "Retry $count/$retries exited $exit, no more retries left."
             return $exit
         fi
     done
@@ -81,21 +79,18 @@ function bl_retry {
 # retry function that waits a constant number of seconds between attempts.
 function bl_retry_constant {
     if [[ ${#} -lt 3 ]]; then
-        echo "retry usage: retry <retries> <interval (seconds)> <command>"
-        exit 1
+        bl_die "retry usage: retry <retries> <interval (seconds)> <command>"
     fi
 
     local retries=$1; shift
     local interval=$1; shift
 
     if ! bl_is_num "${retries}"; then
-        echo "Invalid number of retries: ${retries} for command '${*}'".
-        exit 1
+        bl_die "Invalid number of retries: ${retries} for command '${*}'"
     fi
 
     if ! bl_is_num "${interval}"; then
-        echo "Invalid interval in seconds: ${retries} for command '${*}'".
-        exit 1
+        bl_die "Invalid interval in seconds: ${retries} for command '${*}'".
     fi
 
     local count=0
@@ -106,11 +101,11 @@ function bl_retry_constant {
         exit=$?
         count=$((count + 1))
         if [ "${count}" -lt "${retries}" ]; then
-            echo "'${*}' Retry $count/$retries exited $exit, retrying in $interval seconds..."
+            bl_info "'${*}' Retry $count/$retries exited $exit, retrying in $interval seconds..."
             sleep "${interval}"
         else
             # Out of retries :(
-            echo "Retry $count/$retries exited $exit, no more retries left."
+            bl_error "Retry $count/$retries exited $exit, no more retries left."
             return $exit
         fi
     done

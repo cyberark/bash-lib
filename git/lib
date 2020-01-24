@@ -64,15 +64,25 @@ function bl_remote_tag_for_sha(){
 
 ## Minimal git subtree functionality required for tests to pass
 # full subtree functionality is not ready for merge.
+function bl_gittrees_present(){
+    local -r git_trees="$(bl_repo_root)/.gittrees"
+    [[ -e "${git_trees}" ]]
+}
+
 function bl_cat_gittrees(){
     local -r git_trees="$(bl_repo_root)/.gittrees"
     local -r subtrees_file_format=".gittrees should contain one subtree per line,\
 space seperated with three fields: subtree_path renmote_url remote_name"
-    [[ -e "${git_trees}" ]] || bl_die ".gittrees file ${git_trees} not found. ${subtrees_file_format}"
-    grep -E -v '^\s*$|^\s*#' "$(bl_repo_root)/.gittrees"
+    bl_gittrees_present || bl_die ".gittrees file ${git_trees} not found. ${subtrees_file_format}"
+    grep -E -v '^\s*$|^\s*#' "$(bl_repo_root)/.gittrees" || true
 }
 
 function bl_tracked_files_excluding_subtrees(){
-    subtrees="$(bl_cat_gittrees | awk '{print $1}' | paste -sd '|' -)"
-    bl_all_files_in_repo | grep -E -v "${subtrees}"
+    if bl_gittrees_present; then
+        subtrees="$(bl_cat_gittrees | awk '{print $1}' | paste -sd '|' -)"
+        bl_all_files_in_repo | grep -E -v "${subtrees}"
+    else
+        bl_log debug ".gittrees not found subtress not excluded" stderr
+        bl_all_files_in_repo
+    fi
 }

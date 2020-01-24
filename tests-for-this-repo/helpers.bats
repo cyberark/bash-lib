@@ -17,7 +17,7 @@ teardown(){
 
 @test "bl_die exits and prints message" {
     run bash -c ". ${BASH_LIB_DIR}/init; bl_die msg"
-    assert_output msg
+    assert_output --partial msg
     assert_failure
 }
 
