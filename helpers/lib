@@ -7,6 +7,11 @@ function bl_die(){
     exit 1
 }
 
+function bl_fail(){
+    bl_error "${@}"
+    return 1
+}
+
 #safe pushd
 function bl_spushd(){
     if ! pushd "${1}" >/dev/null; then
@@ -36,24 +41,28 @@ function bl_retry {
     # Maxiumum amount of fixed delay between attempts
     # a random value will still be added.
     local -r MAX_BACKOFF=30
+    local rc
+    local count
+    local retries
+    local backoff
 
     if [[ ${#} -lt 2 ]]; then
         bl_die "retry usage: retry <retries> <command>"
     fi
 
-    local retries=$1
+    retries=$1
     shift
 
     if ! bl_is_num "${retries}"; then
         bl_die "Invalid number of retries: ${retries} for command '${*}'".
     fi
 
-    local count=0
+    count=0
     until eval "$@"; do
         # Command failed, otherwise until would have skipped the loop
 
         # Store return code so it can be reported to the user
-        exit=$?
+        rc=$?
         count=$((count + 1))
         if [ "${count}" -lt "${retries}" ]; then
             # There are still retries left, calculate delay and notify user.
@@ -65,12 +74,12 @@ function bl_retry {
             # Add a random amount to the delay to prevent competing processes
             # from re-colliding.
             wait=$(( backoff + (RANDOM % count) ))
-            bl_info "'${*}' Retry $count/$retries exited $exit, retrying in $wait seconds..."
+            bl_info "'${*}' Retry $count/$retries exited $rc, retrying in $wait seconds..."
             sleep $wait
         else
             # Out of retries :(
-            bl_error "Retry $count/$retries exited $exit, no more retries left."
-            return $exit
+            bl_error "Retry $count/$retries exited $rc, no more retries left."
+            return $rc
         fi
     done
     return 0
@@ -84,6 +93,9 @@ function bl_retry_constant {
 
     local retries=$1; shift
     local interval=$1; shift
+    local count
+    local rc
+    local interval
 
     if ! bl_is_num "${retries}"; then
         bl_die "Invalid number of retries: ${retries} for command '${*}'"
@@ -93,20 +105,20 @@ function bl_retry_constant {
         bl_die "Invalid interval in seconds: ${retries} for command '${*}'".
     fi
 
-    local count=0
+    count=0
     until eval "$@"; do
         # Command failed, otherwise until would have skipped the loop
 
         # Store return code so it can be reported to the user
-        exit=$?
+        rc=$?
         count=$((count + 1))
         if [ "${count}" -lt "${retries}" ]; then
-            bl_info "'${*}' Retry $count/$retries exited $exit, retrying in $interval seconds..."
+            bl_info "'${*}' Retry $count/$retries exited $rc, retrying in $interval seconds..."
             sleep "${interval}"
         else
             # Out of retries :(
-            bl_error "Retry $count/$retries exited $exit, no more retries left."
-            return $exit
+            bl_error "Retry $count/$retries exited $rc, no more retries left."
+            return $rc
         fi
     done
     return 0

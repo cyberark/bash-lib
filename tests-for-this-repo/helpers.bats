@@ -21,6 +21,12 @@ teardown(){
     assert_failure
 }
 
+@test "bl_fail fails but does not exit" {
+    run bl_fail message
+    assert_failure
+    assert_output --partial message
+}
+
 @test "bl_spushd is quiet on stdout" {
     run bl_spushd /tmp
     assert_output ""

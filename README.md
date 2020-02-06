@@ -122,6 +122,9 @@ files within it's directory.
       <td>Git helpers</td>
       <td>
         <ol>
+          <li><b>bl_git_available</b>: True if git binary or function is available</li>
+          <li><b>bl_in_git_repo</b>: True if current directory is a git working directory</li>
+          <li><b>bl_github_owner_repo</b>: returns $owner/$repo extracted from the url of the origin remote</li>
           <li><b>bl_repo_root</b>: Find the root of the current git repo.</li>
           <li><b>bl_all_files_in_repo</b>: List files tracked by git.</li>
           <li><b>bl_remote_latest_tag</b>: Returns the symbolic name of the latest tag from a remote.</li>
@@ -134,11 +137,27 @@ files within it's directory.
         </ol>
       </td>
     </tr>
+    <tr>
+      <td><a href="github/lib">git</a></td>
+      <td>Github Related Functions</td>
+      <td>
+        <ol>
+          <li><b>bl_hub_available</b>: True if hub binary or function is available</li>
+          <li><b>bl_hub_creds_available</b>: True if hub creds are available (file or env vars)</li>
+          <li><b>bl_hub_check</b>: Preflight check for hub, true if git installed, in git repo, hub installed and hub creds are available</li>
+          <li><b>bl_hub_download_latest</b>: Download latest hub binary from github and install to ~/bin or specified path</li>
+          <li><b>bl_hub_issue_number_for_title</b>: Find the issue number for an issue from its title, searches open issues in the current repo. (current repo = workding directory, repo is found by origin remote)</li>
+          <li><b>bl_hub_add_issue_comment</b>: Add a comment to an issue</li>
+          <li><b>bl_hub_comment_or_create_issue</b>: Create issue if an issue matching the title doesn't exist. If a match is found, add a comment to it</li>
+        </ol>
+      </td>
+    </tr>
       <td><a href="helpers/lib">helpers</a></td>
       <td>Bash scripting helpers</td>
       <td>
         <ol>
           <li><b>bl_die</b>: print message and exit 1</li>
+          <li><b>bl_fail</b>: print message and return 1</li>
           <li><b>bl_spushd/bl_spopd</b>: Safe verisons of pushd & popd that call die if the push/pop fails, they also drop stdout. </li>
           <li><b>bl_is_num</b>: Check if a value is a number via regex</li>
           <li><b>bl_retry</b>: Retry a command until it succeeds up to a user specified maximum number of attempts. Escalating delay between attempts.</li>

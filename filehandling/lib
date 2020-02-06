@@ -7,6 +7,9 @@ function bl_abs_path() {
     # generate absolute path from relative path
     # path     : relative filename
     # return : absolute path
+
+    local path
+
     if [[ -z "${1:-}" ]]; then
         path="."
     else

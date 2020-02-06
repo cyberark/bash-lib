@@ -20,6 +20,10 @@ if ! command -v docker >/dev/null; then
     bl_die "Docker must be installed and configured in order to run tests"
 fi
 
+if ! docker ps >/dev/null; then
+    bl_die "Docker Daemon must be accessible in order to run tests"
+fi
+
 # could be tap, junit or pretty
 readonly BATS_OUTPUT_FORMAT="${BATS_OUTPUT_FORMAT:-pretty}"
 readonly BATS_SUITE="${BATS_SUITE:-BATS}"
