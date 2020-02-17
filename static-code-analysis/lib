@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+# Run blackduck scan in an offline manner, download latest version directly from web
+function run_blackduck_scan_rest() {
+    bash <(curl -s -L https://detect.synopsys.com/detect.sh) --blackduck.offline.mode=true --detect.output.path=/src/blackduck --detect.blackduck.signature.scanner.host.url=https://saleshub.blackducksoftware.com --detect.blackduck.signature.scanner.dry.run=true
+}
+
+# Run blackduck scan in an offline manner, fixed version of jar
+function run_blackduck_scan_jar() {
+    cd /tmp && curl -O https://sig-repo.synopsys.com/bds-integrations-release/com/synopsys/integration/synopsys-detect/5.6.2/synopsys-detect-5.6.2.jar
+    java -jar synopsys-detect-5.6.2.jar -Dblackduck.offline.mode=true -Ddetect.output.path=/src/blackduck -Ddetect.blackduck.signature.scanner.host.url=https://saleshub.blackducksoftware.com -Ddetect.blackduck.signature.scanner.dry.run=true
+}
