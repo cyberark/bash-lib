@@ -1,0 +1,121 @@
+#!/bin/bash
+
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+function bl_hub_available(){
+    # type instead of which, so it can be stubbed in tests
+    type hub &>/dev/null || bl_fail "hub (github cli) binary not found, please install it via your package manager or use bl_hub_download_latest."
+}
+
+function bl_hub_creds_available(){
+    config_file="${HUB_CONFIG:-${HOME}/.config/hub}"
+    [[ -n "${GITHUB_USER:-}" ]] && [[ -n "${GITHUB_TOKEN:-}" ]] && return
+    [[ -e "${config_file}" ]] && return
+    bl_fail "No credentials found for (git)hub please set GITHUB_USER and GITHUB_TOKEN or create ~/.config/hub"
+}
+
+function bl_hub_check(){
+    bl_in_git_repo \
+        && bl_hub_available \
+        && bl_hub_creds_available
+}
+
+function bl_hub_download_latest(){
+    local install_dir="${1:-${HOME}/bin}"
+    local os_arch="${2:-}"
+    local tmpdir=".hubdl"
+    local path
+    local download_url
+    local bin_path
+
+    if [[ -z "${os_arch}" ]]; then
+        if [[ "${OSTYPE}" =~ "darwin" ]]; then
+            os_arch="darwin-amd64"
+        else
+            os_arch="linux-amd64"
+        fi
+        bl_debug "Hub Download detected arch: ${os_arch}"
+    fi
+
+    path="$(curl -s -L https://github.com/github/hub/releases/latest |grep -o '[^"]*hub-'${os_arch}'[^"]*')"
+    download_url="https://github.com/${path}"
+
+    bin_path="${install_dir}/hub"
+    mkdir -p "${install_dir}"
+
+    mkdir -p "${tmpdir}"
+    bl_spushd "${tmpdir}"
+        curl -s -L "${download_url}" > hub.tgz
+        tar xf hub.tgz
+    bl_spopd
+    mv "${tmpdir}"/*/bin/hub "${bin_path}"
+    rm -rf "${tmpdir}"
+
+    bl_info "${download_url}/bin/hub --> ${bin_path}"
+}
+
+function bl_hub_issue_number_for_title(){
+    local title="${1}"
+    bl_hub_check
+    hub issue \
+        |grep "${title}" \
+        |awk -F'[ #]+' '{print $2}'
+}
+
+function bl_hub_add_issue_comment(){
+    local issue_number="${1}"
+    local comment="${2}"
+
+    bl_hub_check
+
+    [[ -n "${comment}" ]] || bl_die "bl_hub_add_issue_comment: Comment must not be empty"
+    hub issue show "${issue_number}" >/dev/null || bl_die "Github Issue number ${issue_number} isn't valid for repo $(pwd)"
+
+    owner_repo="$(bl_github_owner_repo)"
+    if hub api "repos/${owner_repo}/issues/${issue_number}/comments" --field body="${comment}" >/dev/null; then
+        bl_debug "Added comment: \"${comment}\" to https://github.com/${owner_repo}/issues/${issue_number}"
+    else
+        bl_fail "Failed to add comment: ${comment} to issue: ${owner_repo}#${issue_number}"
+    fi
+}
+
+
+function bl_hub_comment_or_create_issue(){
+    local title="${1}"
+    local message="${2}"
+    local issue_number
+    local issue_url
+    local action
+    local owner_repo
+    bl_hub_check
+
+    owner_repo="$(bl_github_owner_repo)"
+    issue_number="$(bl_hub_issue_number_for_title "${title}" ||:)"
+
+    if [[ -z "${issue_number}" ]]; then
+        action="created"
+        # issue doesn't exist create it
+        issue_url="$(hub issue create -m "${title}
+
+${message}")"
+
+        # Example issue url: https://github.com/{owner}/{repo}/issues/{issue number}"
+        # To find the issue number, split on / and take the last field
+        issue_number="$(awk -F'/' '{print $NF}' <<<"${issue_url}" )"
+
+        bl_debug "Created issue: ${issue_url} with title \"${title}\""
+    else
+        issue_url="https://github.com/${owner_repo}/issues/${issue_number}"
+        action="commented"
+        bl_debug "Found existing issue for title \"${title}\": ${issue_url}"
+        bl_hub_add_issue_comment "${issue_number}" "${message}"
+    fi
+    cat <<EOJ
+{
+    "action": "${action}",
+    "issue_number": "${issue_number}",
+    "issue_url": "${issue_url}",
+    "issue_ref": "${owner_repo}#${issue_number}"
+}
+EOJ
+}

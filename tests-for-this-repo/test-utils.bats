@@ -56,7 +56,7 @@ bl_docker_safe_tmp(){
         date > d
 
         git add a c
-        git commit -a -m "initial"
+        SKIP_GITLEAKS=YES git commit -a -m "initial"
 
         run bl_find_scripts
         assert_output "a"

@@ -12,9 +12,9 @@ setup(){
     pushd ${repo_dir}
 
     git init
-    git config user.email "ci@cyberark.com"
+    git config user.email "conj_ops_ci@cyberark.com"
     git config user.name "Jenkins"
-    git commit --allow-empty -m "initial"
+    SKIP_GITLEAKS=YES git commit --allow-empty -m "initial"
     echo "some content" > a_file
     git add a_file
     git commit -a -m "some operations fail on empty repos"
@@ -23,6 +23,76 @@ setup(){
 teardown(){
     local -r temp_dir="${BATS_TMPDIR}/testtemp"
     rm -rf "${temp_dir}"
+}
+
+@test "bl_git_available fails when git is not available" {
+    real_path="${PATH}"
+    PATH=""
+    run bl_git_available
+    PATH="${real_path}"
+    assert_failure
+    assert_output --partial "binary not found"
+}
+
+@test "bl_git_available succeeds when git is available" {
+    git(){ :; }
+    run bl_git_available
+    assert_success
+    assert_output ""
+}
+
+@test "bl_in_git_repo fails when not in a git repo" {
+    rm -rf .git
+    run bl_in_git_repo
+    assert_failure
+    assert_output --partial "not within a git repo"
+}
+
+@test "bl_in_git_repo succeeds when in a git repo" {
+    run bl_in_git_repo
+    assert_success
+    assert_output ""
+}
+
+@test "bl_github_owner_repo extracts owner and repo from origin remote" {
+    git remote add origin git@github.com:owner/repo
+    run bl_github_owner_repo
+    assert_success
+    assert_output "owner/repo"
+}
+
+@test "bl_github_owner_repo fails when origin doesn't exist" {
+    run bl_github_owner_repo
+    assert_failure
+    assert_output --partial "doesn't exist"
+}
+
+@test "bl_github_owner_repo fails when origin doesn't point to github" {
+    git remote add origin foo@foo.com:owner/repo
+    run bl_github_owner_repo
+    assert_failure
+    assert_output --partial "not a github remote"
+}
+
+@test "bl_github_owner_repo succeeds with https remote" {
+    git remote add origin "https://github.com/owner/repo"
+    run bl_github_owner_repo
+    assert_success
+    assert_output "owner/repo"
+}
+
+@test "bl_github_owner_repo succeeds with git remote" {
+    git remote add origin "git@github.com:owner/repo"
+    run bl_github_owner_repo
+    assert_success
+    assert_output "owner/repo"
+}
+
+@test "bl_github_owner_repo succeeds with .git suffix" {
+    git remote add origin "https://github.com/owner/repo.git"
+    run bl_github_owner_repo
+    assert_success
+    assert_output "owner/repo"
 }
 
 @test "bl_repo_root returns root of current repo" {
