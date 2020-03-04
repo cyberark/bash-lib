@@ -18,6 +18,12 @@ pipeline {
 
   stages {
 
+    stage('Validate Changelog'){
+      steps{
+        parseChangelog()
+      }
+    }
+
     stage('BATS Tests') {
       steps {
         sh './tests-for-this-repo/run-bats-tests'
