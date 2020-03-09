@@ -5,11 +5,19 @@
 # shellcheck disable=SC2086
 . "$(dirname ${BASH_SOURCE[0]})/init"
 
-# Run BATS Tests
+bl_info "Checking the changelog complies with keepachangelog.com format"
+docker run \
+    --rm \
+    -v "${PWD}/CHANGELOG.md:/CHANGELOG.md" \
+    cyberark/parse-a-changelog
+
+bl_info "Running BATS Tests"
 "${BASH_LIB_DIR}/tests-for-this-repo/run-bats-tests"
 
-# Run Python Lint
+bl_info "Running Python Lint"
 "${BASH_LIB_DIR}/tests-for-this-repo/run-python-lint"
 
-# Run gitleaks
+bl_info "Running gitleaks"
 "${BASH_LIB_DIR}/tests-for-this-repo/run-gitleaks"
+
+bl_info "Sucess! All tests passed."

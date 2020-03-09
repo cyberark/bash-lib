@@ -1,0 +1,23 @@
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+function bl_jq_available(){
+    type jq >/dev/null || bl_fail "jq not found :("
+}
+
+function bl_curl_available(){
+    type curl >/dev/null || bl_fail "curl not found :("
+}
+
+function bl_gem_latest_version(){
+    bl_jq_available
+    bl_curl_available
+
+    gem="${1:-}"
+
+    if [[ -z "${gem}" ]]; then
+        bl_fail "usage: bl_gem_version <gem name>"
+    fi
+
+    curl https://rubygems.org/api/v1/gems/${gem}.json \
+        |jq -r '.version'
+}

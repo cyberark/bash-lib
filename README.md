@@ -195,6 +195,17 @@ files within it's directory.
       </td>
     </tr>
     <tr>
+      <td><a href="test-utils/ruby">Ruby</a></td>
+      <td>Helpers related to ruby infrastructure</td>
+      <td>
+        <ol>
+          <li><b>bl_gem_latest_version</b>: Return the latest version of a gem from rubygems.org</li>
+          <li><b>bl_jq_available</b>: Check jq binary is available</li>
+          <li><b>bl_curl_available</b>: Check curl binary is available</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
       <td><a href="test-utils/lib">test-utils</a></td>
       <td>Helpers for executing tests</td>
       <td>
