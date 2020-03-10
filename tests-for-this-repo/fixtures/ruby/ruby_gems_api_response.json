@@ -1,0 +1,42 @@
+{
+    "name": "parse_a_changelog",
+    "downloads": 6660,
+    "version": "1.0.1",
+    "version_downloads": 168,
+    "platform": "ruby",
+    "authors": "John Tuttle",
+    "info": "Uses a grammar describing the keep-a-changelog format to attempt to parse a given file.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "metadata": {},
+    "yanked": false,
+    "sha": "c081ae854570083ba56097d84a1fc66d47dd31f1a015edcb1ba2cbf9e2a4fe4a",
+    "project_uri": "https://rubygems.org/gems/parse_a_changelog",
+    "gem_uri": "https://rubygems.org/gems/parse_a_changelog-1.0.1.gem",
+    "homepage_uri": "http://github.com/cyberark/parse-a-changelog",
+    "wiki_uri": null,
+    "documentation_uri": "http://www.rubydoc.info/gems/parse_a_changelog/1.0.1",
+    "mailing_list_uri": null,
+    "source_code_uri": null,
+    "bug_tracker_uri": null,
+    "changelog_uri": null,
+    "dependencies": {
+      "development": [
+        {
+          "name": "rspec",
+          "requirements": "~> 3.8"
+        },
+        {
+          "name": "rspec_junit_formatter",
+          "requirements": "~> 0.4.1"
+        }
+      ],
+      "runtime": [
+        {
+          "name": "treetop",
+          "requirements": "~> 1.6"
+        }
+      ]
+    }
+}

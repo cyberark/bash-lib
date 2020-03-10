@@ -28,6 +28,8 @@ function bl_hub_download_latest(){
     local download_url
     local bin_path
 
+    bl_curl_available
+
     if [[ -z "${os_arch}" ]]; then
         if [[ "${OSTYPE}" =~ "darwin" ]]; then
             os_arch="darwin-amd64"
