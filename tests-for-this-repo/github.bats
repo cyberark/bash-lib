@@ -164,7 +164,7 @@ EOF
 
 @test "bl_hub_comment_or_create_issue creates issue when it doesnt exist" {
     bl_hub_check(){ :; }
-    bl_hub_ssue_number_for_title(){ :; }
+    bl_hub_issue_number_for_title(){ :; }
     bl_github_owner_repo(){ echo "owner/repo"; }
     hub(){
         if [[ "${2:-}" == "create" ]]; then
@@ -194,4 +194,19 @@ EOF
     assert_success
     assert_output --partial "comment"
     assert_output --partial "https://github.com/owner/repo/issues/1"
+}
+
+@test "bl_hub_comment_or_create_issue passes label to hub" {
+    bl_hub_check(){ :; }
+    bl_hub_issue_number_for_title(){ :; }
+    bl_github_owner_repo(){ echo "owner/repo"; }
+    hub(){
+        [[ "${5}" == "-l" ]] || bl_die "expected -l for specifying a label"
+        [[ "${6}" == "label" ]] || bl_die "expected 'label' as label name"
+        echo "https://github.com/owner/repo/issues/1"
+    }
+    run bl_hub_comment_or_create_issue title message label
+    assert_success
+    assert_output --partial "https://github.com/owner/repo/issues/1"
+    assert_output --partial "create"
 }

@@ -85,6 +85,8 @@ function bl_hub_add_issue_comment(){
 function bl_hub_comment_or_create_issue(){
     local title="${1}"
     local message="${2}"
+    local label="${3:-}"
+    local label_param=""
     local issue_number
     local issue_url
     local action
@@ -96,10 +98,20 @@ function bl_hub_comment_or_create_issue(){
 
     if [[ -z "${issue_number}" ]]; then
         action="created"
+        if [[ -n "${label}" ]]; then
+            label_param="-l ${label}"
+        fi
+
         # issue doesn't exist create it
+
+        # The following prevents a shellcheck warning about label_param
+        # getting split into multiple words. That is exactly what should
+        # happen as "-l" and "labelname" should be separate tokens for
+        # the hub command.
+        # shellcheck disable=SC2086
         issue_url="$(hub issue create -m "${title}
 
-${message}")"
+${message}" ${label_param})"
 
         # Example issue url: https://github.com/{owner}/{repo}/issues/{issue number}"
         # To find the issue number, split on / and take the last field
