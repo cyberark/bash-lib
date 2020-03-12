@@ -1,4 +1,7 @@
 # Contributing
+
+For general contribution and community guidelines, please see the [community repo](https://github.com/cyberark/community).
+
 Thanks for your interest in bash-lib. Before contributing, please take a
 moment to read and sign our [Contributor
 Agreement](CyberArk_Open_Source_Contributor_Agreement.pdf). This provides
