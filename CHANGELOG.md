@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 2020-03-13
+### Added
+- bl_validate_changelog: Validate a changelog against keepachangelog.com format.
+
+### Changed
+- bl_in_git_repo now fails (return 1) rather than exiting 1
+- Github issues can now be created with a label
+
 ## [2.0.2] - 2020-03-10
 ### Added
 - Retrieve latest version for gem from rubygems.org

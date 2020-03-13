@@ -195,7 +195,7 @@ files within it's directory.
       </td>
     </tr>
     <tr>
-      <td><a href="test-utils/ruby">Ruby</a></td>
+      <td><a href="ruby/lib">Ruby</a></td>
       <td>Helpers related to ruby infrastructure</td>
       <td>
         <ol>
@@ -213,6 +213,7 @@ files within it's directory.
           <li><b>bl_shellcheck_script</b>: Execute shellcheck against a script, uses docker.</li>
           <li><b>bl_find_scripts</b>: Find git tracked files with extension.</li>
           <li><b>bl_tap2junit</b>: Convert a subset of <a href="http://testanything.org/">TAP</a> to JUnit XML. Retains logs for errors.</li>
+          <li><b>bl_validate_changelog</b>: Check CHANGELOG.md (or a specified file) complies with keepachangelog.com format. </li>
         </ol>
       </td>
     </tr>

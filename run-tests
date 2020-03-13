@@ -6,10 +6,7 @@
 . "$(dirname ${BASH_SOURCE[0]})/init"
 
 bl_info "Checking the changelog complies with keepachangelog.com format"
-docker run \
-    --rm \
-    -v "${PWD}/CHANGELOG.md:/CHANGELOG.md" \
-    cyberark/parse-a-changelog
+"${BASH_LIB_DIR}/tests-for-this-repo/validate-changelog"
 
 bl_info "Running BATS Tests"
 "${BASH_LIB_DIR}/tests-for-this-repo/run-bats-tests"

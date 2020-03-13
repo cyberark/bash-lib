@@ -48,3 +48,41 @@ function bl_tap2junit(){
     # filters stdin to stdout
     docker run --rm -i tap-junit -s "${suite}"
 }
+
+# Checks a Changelog file against keepachangelog.com format.
+function bl_validate_changelog(){
+    local CHANGELOG=""
+
+    if [[ -z "${1:-}" ]]; then
+        # Changelog file not specified
+
+        # Look in the current directory
+        if [[ -r CHANGELOG.md ]]; then
+            CHANGELOG="CHANGELOG.md"
+        fi
+
+        # Look in the repo root
+        if [[ -z "${CHANGELOG}" ]] && bl_in_git_repo; then
+            guess="$(bl_repo_root)/CHANGELOG.md"
+            [[ -r "${guess}" ]] && CHANGELOG="${guess}"
+        fi
+
+        if [[ -z "${CHANGELOG}" ]]; then
+            bl_fail "CHANGELOG.md not found in current directory or root of git "\
+                    "repo, please specify the path to the changelog. " \
+                    "Usage: bl_validate_changelog /path/to/CHANGELOG.md"
+        fi
+    else
+        # Changelog specified as parameter, use that.
+        CHANGELOG="${1}"
+        [[ -r "${CHANGELOG}" ]] || bl_fail "Can't read changelog file: ${CHANGELOG}"
+    fi
+
+    # Docker volume paths need to be absolute
+    CHANGELOG="$(bl_abs_path "${CHANGELOG}")"
+
+    docker run \
+        --rm \
+        --volume "${CHANGELOG}:/CHANGELOG.md" \
+        cyberark/parse-a-changelog
+}
