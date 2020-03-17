@@ -9,7 +9,7 @@ function bl_git_available(){
 
 function bl_in_git_repo(){
     bl_git_available
-    git status >/dev/null || bl_die "$(pwd) is not within a git repo."
+    git status >/dev/null || bl_fail "$(pwd) is not within a git repo."
 }
 
 function bl_github_owner_repo(){

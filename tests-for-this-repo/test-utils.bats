@@ -76,3 +76,32 @@ bl_docker_safe_tmp(){
     assert_equal "${stdout}" "$(cat ${fdir}/tap2junit.out)"
     assert_equal "${rc}" "0"
 }
+
+@test "bl_validate_changelog validates changelog specified as paremeter" {
+    run bl_validate_changelog "${BASH_LIB_DIR}"/CHANGELOG.md
+    assert_success
+}
+
+@test "bl_validate_changelog finds changelog in current directory" {
+    pushd "${BASH_LIB_DIR}"
+        run bl_validate_changelog
+    popd
+    assert_success
+}
+
+@test "bl_validate_changelog finds changelog in git root" {
+    pushd "${BASH_LIB_DIR}/tests-for-this-repo"
+        run bl_validate_changelog
+    popd
+    assert_success
+}
+
+@test "bl_validate_changelog fails with invalid changelog path" {
+    run bl_validate_changelog notavalidchangelog.md
+    assert_failure
+}
+
+@test "bl_validate_changelog fails with invalid changelog" {
+    run bl_validate_changelog README.md
+    assert_failure
+}
