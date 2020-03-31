@@ -1,0 +1,24 @@
+#!/bin/bash
+
+: "${BASH_LIB_DIR:?BASH_LIB_DIR must be set. Please source bash-lib/init before other scripts from bash-lib.}"
+
+decode_base64_url() {
+  local len=$((${#1} % 4))
+  local result="$1"
+  if [ $len -eq 2 ]; then result="$1"'=='
+  elif [ $len -eq 3 ]; then result="$1"'='
+  fi
+  echo "$result" | tr '_-' '/+' | openssl enc -d -base64
+}
+
+decode_jwt(){
+  decode_base64_url "$(echo -n $2 | cut -d "." -f $1)" | jq .
+}
+
+function bl_decode_jwt_header(){
+  decode_jwt 1 $1
+}
+
+function bl_decode_jwt_payload(){
+  decode_jwt 2 $1
+}

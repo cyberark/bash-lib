@@ -26,7 +26,7 @@ BASH_LIB_DIR="${BASH_LIB_DIR_RELATIVE}"
 
 # Load the filehandling module for the abspath
 # function
-for lib in helpers logging filehandling git github k8s test-utils ruby; do
+for lib in helpers logging filehandling git github k8s test-utils ruby jwt; do
     . "${BASH_LIB_DIR_RELATIVE}/${lib}/lib"
 done
 
