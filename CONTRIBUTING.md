@@ -1,13 +1,10 @@
 # Contributing
 
-For general contribution and community guidelines, please see the [community repo](https://github.com/cyberark/community).
+Thanks for your interest in bash-lib!
 
-Thanks for your interest in bash-lib. Before contributing, please take a
-moment to read and sign our [Contributor
-Agreement](CyberArk_Open_Source_Contributor_Agreement.pdf). This provides
-patent protection for all bash-lib users and allows CyberArk to
-enforce its license terms. Please email a signed copy to <a
-href="oss@cyberark.com">oss@cyberark.com</a>
+For general contribution and community guidelines, please see the [community repo](https://github.com/cyberark/community).
+In particular, before contributing please review our [contributor licensing guide](https://github.com/cyberark/community/blob/master/CONTRIBUTING.md#when-the-repo-does-not-include-the-cla)
+to ensure your contribution is compliant with our contributor license agreements.
 
 Contributed bash functions are most welcome! The more we share the less we
 duplicate each other. In order to keep this repo tidy, every function must be
