@@ -61,7 +61,7 @@ function bl_hub_issue_number_for_title(){
     bl_hub_check
     hub issue \
         |grep "${title}" \
-        |awk -F'[ #]+' '{print $2}'
+        |awk -F'[ #]+' '{print $2; exit}'
 }
 
 function bl_hub_add_issue_comment(){

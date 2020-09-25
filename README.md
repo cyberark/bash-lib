@@ -146,7 +146,7 @@ files within it's directory.
           <li><b>bl_hub_creds_available</b>: True if hub creds are available (file or env vars)</li>
           <li><b>bl_hub_check</b>: Preflight check for hub, true if git installed, in git repo, hub installed and hub creds are available</li>
           <li><b>bl_hub_download_latest</b>: Download latest hub binary from github and install to ~/bin or specified path</li>
-          <li><b>bl_hub_issue_number_for_title</b>: Find the issue number for an issue from its title, searches open issues in the current repo. (current repo = workding directory, repo is found by origin remote)</li>
+          <li><b>bl_hub_issue_number_for_title</b>: Find the issue number for an issue from its title, searches open issues in the current repo. (current repo = workding directory, repo is found by origin remote). If multiple issues match the supplied title string, only the first is returned.</li>
           <li><b>bl_hub_add_issue_comment</b>: Add a comment to an issue</li>
           <li><b>bl_hub_comment_or_create_issue</b>: Create issue if an issue matching the title doesn't exist. If a match is found, add a comment to it</li>
         </ol>
