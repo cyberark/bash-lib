@@ -120,6 +120,24 @@ EOF
     assert_output "7"
 }
 
+@test "bl_hub_issue_number_for_title returns a single issue number" {
+    bl_hub_check(){ :; }
+    hub(){
+        [[ "${1}" == "issue" ]] || bl_die "issue subcommand not specified"
+        cat <<EOF
+     #19  Add code coverage to bash-lib   kind/quality
+     #11  Generated Documentation
+     #12  Duplicate
+     #13  Duplicate
+      #7  Clean up
+EOF
+    }
+
+    run bl_hub_issue_number_for_title "Duplicate"
+    assert_success
+    assert_output "12"
+}
+
 @test "bl_hub_add_issue_comment uses the correct URL" {
     bl_hub_check(){ :; }
     hub(){

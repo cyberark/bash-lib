@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.4] - 2020-09-25
+### Changed
+- bl_hub_issue_number_for_title now returns the first matching issue number only, instead of all matching issue numbers separated by newlines.
+
 ## [2.0.3] - 2020-03-13
 ### Added
 - bl_validate_changelog: Validate a changelog against keepachangelog.com format.
