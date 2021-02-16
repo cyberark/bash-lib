@@ -17,7 +17,10 @@ setup(){
     SKIP_GITLEAKS=YES git commit --allow-empty -m "initial"
     echo "some content" > a_file
     git add a_file
-    git commit -a -m "some operations fail on empty repos"
+    # Add a submodule as that trips up some operations
+    git submodule add https://github.com/cyberark/conjur conjur
+    git submodule update --init
+    SKIP_GITLEAKS=YES git commit -a -m "some operations fail on empty repos"
 }
 
 teardown(){
@@ -112,7 +115,8 @@ teardown(){
     # untracked file shouldn't be listed in output
     date > b
     run bl_all_files_in_repo
-    assert_output "a_file"
+    assert_output ".gitmodules
+a_file"
     assert_success
 }
 

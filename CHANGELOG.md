@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.5] - 2021-02-16
+### Changed
+- bl_all_files_in_repo now excludes submodules
+
 ## [2.0.4] - 2020-09-25
 ### Changed
 - bl_hub_issue_number_for_title now returns the first matching issue number only, instead of all matching issue numbers separated by newlines.

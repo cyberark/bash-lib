@@ -126,7 +126,7 @@ files within it's directory.
           <li><b>bl_in_git_repo</b>: True if current directory is a git working directory</li>
           <li><b>bl_github_owner_repo</b>: returns $owner/$repo extracted from the url of the origin remote</li>
           <li><b>bl_repo_root</b>: Find the root of the current git repo.</li>
-          <li><b>bl_all_files_in_repo</b>: List files tracked by git.</li>
+          <li><b>bl_all_files_in_repo</b>: List files tracked by git, excludes submodules.</li>
           <li><b>bl_remote_latest_tag</b>: Returns the symbolic name of the latest tag from a remote.</li>
           <li><b>bl_remote_latest_tagged_commit</b>: Returns the SHA of the most recently tagged commit in a remote repo (<code>tag^{}</code>).</li>
           <li><b>bl_remote_sha_for_ref</b>: Returns the SHA for a given ref from a named remote.</li>
