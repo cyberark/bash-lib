@@ -138,7 +138,7 @@ files within it's directory.
       </td>
     </tr>
     <tr>
-      <td><a href="github/lib">git</a></td>
+      <td><a href="github/lib">github</a></td>
       <td>Github Related Functions</td>
       <td>
         <ol>
