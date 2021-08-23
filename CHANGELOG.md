@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.6] - 2021-08-23
+### Changed
+- bl_shellcheck_script now passes SHELLCHECK_OPTS through to the container that runs shellcheck
+
 ## [2.0.5] - 2021-02-16
 ### Changed
 - bl_all_files_in_repo now excludes submodules
