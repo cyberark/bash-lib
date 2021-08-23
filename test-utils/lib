@@ -24,7 +24,11 @@ function bl_shellcheck_script(){
 
     if bash -n "${script}"; then
         # shellcheck disable=SC2086
-        docker run --rm -v "${PWD}:/mnt" ${SHELLCHECK_IMAGE}:${SHELLCHECK_TAG} ${ignores} ${script}
+        docker run \
+            --rm \
+            -v "${PWD}:/mnt" \
+            -e SHELLCHECK_OPTS \
+            ${SHELLCHECK_IMAGE}:${SHELLCHECK_TAG} ${ignores} ${script}
     else
         return 1
     fi
