@@ -11,7 +11,7 @@
 @test "Kubernetes Cluster Is Available" {
         : ${KUBECTL_CLI_URL:?Required Var, did you run tests via summon?}
         run bl_run_docker_gke_command "kubectl cluster-info"
-        assert_output --regexp "Kubernetes master.* is running at .*https://"
+        assert_output --regexp "Kubernetes.* is running at .*https://"
         assert_success
 }
 
