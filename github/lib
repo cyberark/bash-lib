@@ -24,7 +24,6 @@ function bl_hub_download_latest(){
     local install_dir="${1:-${HOME}/bin}"
     local os_arch="${2:-}"
     local tmpdir=".hubdl"
-    local path
     local download_url
     local bin_path
 
@@ -39,8 +38,10 @@ function bl_hub_download_latest(){
         bl_debug "Hub Download detected arch: ${os_arch}"
     fi
 
-    path="$(curl -s -L https://github.com/github/hub/releases/latest |grep -o '[^"]*hub-'${os_arch}'[^"]*')"
-    download_url="https://github.com/${path}"
+    asset_url="$(curl https://api.github.com/repos/github/hub/releases/latest \
+        |jq -r ".assets | map(select(.name | contains(\"${os_arch}\")))[0].url")"
+
+    download_url="$(curl "${asset_url}"  |jq -r '.browser_download_url')"
 
     bin_path="${install_dir}/hub"
     mkdir -p "${install_dir}"
