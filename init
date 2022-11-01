@@ -38,9 +38,9 @@ eval "$(declare -F | sed -e 's/-f /-fx /' | grep 'x bl_')"
 BASH_LIB_DIR="$(bl_abs_path ${BASH_LIB_DIR_RELATIVE})"
 export BASH_LIB_DIR
 
-# Update Submodules
+# Update Submodules, but ignore any errors. This way it won't fail if it's not in a git repo.
 bl_spushd "${BASH_LIB_DIR}"
-    git submodule update --init --recursive
+    git submodule update --init --recursive || true
 bl_spopd
 
 export BATS_CMD="${BASH_LIB_DIR}/test-utils/bats/bin/bats"
