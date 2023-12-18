@@ -26,7 +26,6 @@ function bl_hub_download_latest(){
     local tmpdir=".hubdl"
     local download_url
     local bin_path
-
     bl_curl_available
 
     if [[ -z "${os_arch}" ]]; then
@@ -38,9 +37,10 @@ function bl_hub_download_latest(){
         bl_debug "Hub Download detected arch: ${os_arch}"
     fi
 
-    asset_url="$(curl https://api.github.com/repos/github/hub/releases/latest \
+    asset_url="$(curl -L https://api.github.com/repos/github/hub/releases/latest \
         |jq -r ".assets | map(select(.name | contains(\"${os_arch}\")))[0].url")"
 
+    git config --global init.defaultBranch master
     download_url="$(curl "${asset_url}"  |jq -r '.browser_download_url')"
 
     bin_path="${install_dir}/hub"

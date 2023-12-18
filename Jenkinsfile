@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { label 'executor-v2' }
+  agent { label 'conjur-enterprise-common-agent' }
 
   options {
     timestamps()
@@ -17,28 +17,42 @@ pipeline {
   }
 
   stages {
+    stage('Get InfraPool ExecutorV2 Agent') {
+      steps {
+        script {
+          // Request ExecutorV2 agents for 1 hour(s)
+          INFRAPOOL_EXECUTORV2_AGENT_0 = getInfraPoolAgent.connected(type: "ExecutorV2", quantity: 1, duration: 2)[0]
+        }
+      }
+    }
 
     stage('Validate Changelog'){
       steps{
-        parseChangelog()
+        parseChangelog(INFRAPOOL_EXECUTORV2_AGENT_0)
       }
     }
 
     stage('BATS Tests') {
       steps {
-        sh './tests-for-this-repo/run-bats-tests'
+        script {
+          INFRAPOOL_EXECUTORV2_AGENT_0.agentSh './tests-for-this-repo/run-bats-tests'
+        }
       }
     }
 
     stage('Python Linting') {
       steps {
-        sh './tests-for-this-repo/run-python-lint'
+        script {
+          INFRAPOOL_EXECUTORV2_AGENT_0.agentSh './tests-for-this-repo/run-python-lint'
+        }
       }
     }
 
     stage('Secrets Leak Check') {
       steps {
-        sh './tests-for-this-repo/run-gitleaks'
+        script {
+          INFRAPOOL_EXECUTORV2_AGENT_0.agentSh './tests-for-this-repo/run-gitleaks'
+        }
       }
     }
 
@@ -46,8 +60,12 @@ pipeline {
 
   post {
     always {
-      junit '*-junit.xml'
-      cleanupAndNotify(currentBuild.currentResult)
+      script {
+        INFRAPOOL_EXECUTORV2_AGENT_0.agentStash name: 'xml-report', includes: '*.xml'
+        unstash 'xml-report'
+        junit '*-junit.xml'
+        releaseInfraPoolAgent(".infrapool/release_agents")
+      }
     }
   }
 }
